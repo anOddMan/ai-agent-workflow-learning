@@ -22,15 +22,20 @@ if not exist "node_modules" (
     echo.
 )
 
-:: 启动开发服务器
+:: 启动开发服务器（使用 --host 参数便于访问）
 echo [2/2] 正在启动开发服务器...
 echo.
-echo 项目启动后，请访问: http://localhost:5173
+echo 项目启动后，浏览器将自动打开
 echo 按 Ctrl+C 可停止服务器
 echo.
 
-:: 启动 Vite 并自动打开浏览器
-start "" http://localhost:5173
-call npm run dev
+:: 使用 start 在新窗口启动服务器，便于后续操作
+start "Vite Dev Server" cmd /k "npm run dev -- --open"
 
+:: 等待服务器启动（约3秒）
+timeout /t 3 /nobreak >nul
+
+echo.
+echo [完成] 开发服务器已启动，浏览器即将打开...
+echo.
 pause
