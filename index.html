@@ -1,0 +1,48 @@
+<!doctype html>
+<!--
+  @file index.html
+  @description HTML 入口文件 - React 应用的挂载点
+  @author AI Agent Technical Workflow Analysis
+
+  这个文件是 Vite 项目的入口 HTML，包含：
+  - 页面元信息（标题、编码、viewport）
+  - React 应用挂载容器
+  - 主脚本入口（指向 main.tsx）
+
+  注意：这是一个 React SPA 项目，不能直接在浏览器中打开此 HTML 文件！
+  原因：<script type="module"> 引用的 TypeScript/JSX 文件需要 Vite 转译。
+
+  正确的启动方式：
+  1. 运行 npm install 安装依赖
+  2. 运行 npm run dev 启动开发服务器
+  3. 在浏览器访问 http://localhost:5173
+-->
+<html lang="en">
+  <!-- ===== 页面头部信息 ===== -->
+  <head>
+    <!-- 字符编码：UTF-8 支持所有语言字符 -->
+    <meta charset="UTF-8" />
+
+    <!-- viewport 设置：响应式网页设计必需 -->
+    <!-- width=device-width: 使用设备宽度 -->
+    <!-- initial-scale=1.0: 初始缩放比例 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- 页面标题：显示在浏览器标签页 -->
+    <title>AI Agent 底层业务流程全解析</title>
+  </head>
+
+  <!-- ===== 页面主体 ===== -->
+  <body>
+    <!-- React 应用挂载容器 -->
+    <!-- Vite 会将 React 组件渲染到这个容器中 -->
+    <!-- id="root" 与 main.tsx 中的 getElementById("root") 对应 -->
+    <div id="root"></div>
+
+    <!-- 主脚本入口 -->
+    <!-- type="module": ES Module 格式 -->
+    <!-- src="/src/main.tsx": 指向入口 TypeScript 文件 -->
+    <!-- Vite 会自动转译 TSX 并处理依赖 -->
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

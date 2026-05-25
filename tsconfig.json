@@ -1,0 +1,109 @@
+/**
+ * TypeScript 编译器配置文件
+ * @file tsconfig.json
+ * @description TypeScript 编译器配置 - 定义编译选项和类型检查规则
+ * @author AI Agent Technical Workflow Analysis
+ *
+ * TypeScript 编译器 (tsc) 使用此配置文件来：
+ * - 指定编译目标（ES 版本）
+ * - 配置模块解析方式
+ * - 启用/禁用类型检查规则
+ * - 定义路径映射别名
+ *
+ * 本配置针对 Vite + React 项目优化：
+ * - 目标: ES2020（现代浏览器支持）
+ * - 模块: ESNext（Vite 原生支持）
+ * - JSX: react-jsx（React 17+ 新转换）
+ */
+{
+  "compilerOptions": {
+    /* ===== 编译目标 ===== */
+    // 编译后的 JavaScript 版本
+    // ES2020 支持: optional chaining, nullish coalescing, BigInt 等
+    "target": "ES2020",
+
+    // 类字段语义：使用 define 语义而非 set 语义
+    // 这对 React 组件中的类字段行为有影响
+    "useDefineForClassFields": true,
+
+    /* ===== 编译环境 ===== */
+    // 包含的库类型定义
+    // ES2020: ES 标准库
+    // DOM: 浏览器 DOM API
+    // DOM.Iterable: DOM 可迭代对象（如 NodeList.forEach）
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+
+    /* ===== 模块系统 ===== */
+    // 模块格式：ESNext（最新 ES 模块标准）
+    // Vite 使用 Rollup 打包，原生支持 ES 模块
+    "module": "ESNext",
+
+    // 跳过库类型检查：加快编译速度
+    // 对于大型项目的第三方库，可以跳过类型检查
+    "skipLibCheck": true,
+
+    // 类型声明文件：包含 Node.js 类型
+    // 用于访问 Node.js API（如 path, fs 等）
+    "types": ["node"],
+
+    /* ===== Bundler 模式 ===== */
+    // Vite 推荐的 Bundler 模式配置
+    // 适用于现代打包工具（Vite, webpack, esbuild）
+
+    // 模块解析策略：bundler
+    // 允许导入 .ts/.tsx 文件而无需指定扩展名
+    "moduleResolution": "bundler",
+
+    // 允许导入 TypeScript 扩展名
+    // Vite 会自动处理 .ts/.tsx 文件
+    "allowImportingTsExtensions": true,
+
+    // 启用 JSON 模块导入
+    // 允许 import config from './config.json'
+    "resolveJsonModule": true,
+
+    // 隔离模块：确保每个文件可以独立转译
+    // 对于打包工具，这是必要的设置
+    "isolatedModules": true,
+
+    // 不输出文件：Vite 负责打包，tsc 只做类型检查
+    "noEmit": true,
+
+    // JSX 转换方式：react-jsx
+    // React 17+ 的新 JSX 转换，无需 import React
+    "jsx": "react-jsx",
+
+    /* ===== 路径映射 ===== */
+    // 与 vite.config.ts 中的 alias 保持一致
+    // 允许 TypeScript 识别 @ 别名
+
+    // 基础路径：当前目录
+    "baseUrl": ".",
+
+    // 路径映射：@/* -> src/* 目录
+    "paths": {
+      "@/*": ["src/*"]
+    },
+
+    /* ===== 类型检查规则 ===== */
+    // 严格模式：启用所有严格类型检查选项
+    "strict": true,
+
+    // 检查未使用的局部变量
+    // 有助于发现死代码
+    "noUnusedLocals": true,
+
+    // 检查未使用的参数
+    "noUnusedParameters": true,
+
+    // 确保 switch 语句的所有分支都有返回值
+    // 防止遗漏 case 导致的运行时错误
+    "noFallthroughCasesInSwitch": true
+  },
+
+  /* ===== 包含的文件 ===== */
+  // 指定 TypeScript 编译器处理的文件范围
+  // src: 所有源代码文件
+  // vite.config.ts: Vite 配置文件（需要类型检查）
+  "include": ["src", "vite.config.ts"]
+}

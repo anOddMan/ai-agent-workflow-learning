@@ -1,0 +1,140 @@
+/**
+ * @file index.css
+ * @description 全局样式文件 - Tailwind CSS 基础样式和自定义组件样式
+ * @author AI Agent Technical Workflow Analysis
+ *
+ * 这个文件使用 Tailwind CSS v4 的新语法，通过 @import "tailwindcss" 导入基础样式，
+ * 然后使用 @layer 指令添加自定义样式层。
+ *
+ * Tailwind CSS v4 特点：
+ * - 不需要 tailwind.config.js 配置文件
+ * - 使用 @tailwindcss/vite 插件自动处理
+ * - 更快的构建速度和更小的输出体积
+ */
+
+/* ===== 导入 Tailwind CSS 基础样式 ===== */
+@import "tailwindcss";
+
+/* ===== Base 层 - 基础样式重置 ===== */
+/* 这些样式应用于所有 HTML 元素，作为全局默认样式 */
+@layer base {
+  /* 平滑滚动：点击导航链接时平滑滚动到目标位置 */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* 全局字体和颜色设置 */
+  body {
+    /* 字体栈：Inter 优先，然后是系统默认字体 */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    /* 深色背景色 - 与整体设计风格一致 */
+    background: #0a0e1a;
+    /* 默认文字颜色 - 浅灰色 */
+    color: #e2e8f0;
+  }
+
+  /* ===== 自定义滚动条样式 ===== */
+  /* 仅影响 WebKit 内核浏览器（Chrome, Safari, Edge） */
+  ::-webkit-scrollbar {
+    width: 8px;  /* 滚动条宽度 */
+  }
+
+  /* 滚动条轨道（背景） */
+  ::-webkit-scrollbar-track {
+    background: #1a1f36;  /* 深色轨道背景 */
+  }
+
+  /* 滚动条滑块（可拖动部分） */
+  ::-webkit-scrollbar-thumb {
+    background: #3b4261;  /* 中等深度的颜色 */
+    border-radius: 4px;   /* 圆角 */
+  }
+
+  /* 滚动条滑块悬停状态 */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #4c5578;  /* 悬停时颜色变浅 */
+  }
+}
+
+/* ===== Components 层 - 自定义组件样式 ===== */
+/* 这些样式用于创建可复用的 UI 组件 */
+@layer components {
+  /* ===== Glow 效果 - 发光阴影 ===== */
+  /* 用于强调关键元素，创建科技感视觉效果 */
+
+  /* 蓝色发光效果 */
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 60px rgba(59, 130, 246, 0.1);
+  }
+
+  /* 紫色发光效果 */
+  .glow-purple {
+    box-shadow: 0 0 20px rgba(139, 92, 246, 0.3), 0 0 60px rgba(139, 92, 246, 0.1);
+  }
+
+  /* 绿色发光效果 */
+  .glow-green {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3), 0 0 60px rgba(34, 197, 94, 0.1);
+  }
+
+  /* 橙色发光效果 */
+  .glow-orange {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.3), 0 0 60px rgba(249, 115, 22, 0.1);
+  }
+
+  /* 青色发光效果 */
+  .glow-cyan {
+    box-shadow: 0 0 20px rgba(6, 182, 212, 0.3), 0 0 60px rgba(6, 182, 212, 0.1);
+  }
+
+  /* ===== 代码块样式 ===== */
+  /* 用于展示代码示例的容器 */
+  .code-block {
+    background: #0d1117;              /* GitHub 深色背景 */
+    border: 1px solid #21262d;        /* GitHub 边框颜色 */
+    border-radius: 8px;               /* 圆角 */
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace; /* 代码字体 */
+    font-size: 13px;                  /* 字体大小 */
+    line-height: 1.6;                 /* 行高 */
+  }
+
+  /* ===== 渐变文字效果 ===== */
+  /* 用于标题等重要文字的彩色渐变效果 */
+  .gradient-text {
+    background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6); /* 蓝→紫→粉渐变 */
+    -webkit-background-clip: text;    /* Safari/Chrome: 将背景裁剪到文字 */
+    -webkit-text-fill-color: transparent; /* Safari/Chrome: 文字填充透明 */
+    background-clip: text;            /* 标准属性 */
+  }
+
+  /* ===== 深色卡片样式 ===== */
+  /* 用于内容容器，带渐变背景和模糊效果 */
+  .card-dark {
+    background: linear-gradient(135deg, rgba(30, 41, 59, 0.8), rgba(15, 23, 42, 0.9)); /* 渐变背景 */
+    border: 1px solid rgba(148, 163, 184, 0.1); /* 微弱边框 */
+    backdrop-filter: blur(10px);      /* 背景模糊效果（毛玻璃） */
+  }
+}
+
+/* ===== 自定义动画 ===== */
+/* 用于创建动态视觉效果 */
+
+/* 流程脉冲动画 - 元素闪烁效果 */
+@keyframes flowPulse {
+  0%, 100% { opacity: 0.4; }  /* 开始和结束时半透明 */
+  50% { opacity: 1; }         /* 中间时完全可见 */
+}
+
+/* 虚线流动动画 - SVG 虚线移动效果 */
+@keyframes dashFlow {
+  to { stroke-dashoffset: -20; }  /* 虚线向左移动 20px */
+}
+
+/* 动画应用类 */
+.animate-flow-pulse {
+  animation: flowPulse 2s ease-in-out infinite; /* 2秒循环脉冲 */
+}
+
+.animate-dash-flow {
+  animation: dashFlow 1s linear infinite; /* 1秒循环流动 */
+}
