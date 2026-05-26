@@ -91,7 +91,7 @@ ai-agent-technical-workflow-analysis/
 
 以下是「全景流程图」模块的页面截图，展示了 AI Agent 从用户输入到最终响应的 8 个完整业务阶段：
 
-![全景流程图](flow-diagram.png)
+![全景流程图](src/AI%20Agent%20底层业务流程全景图.jpg)
 
 > 💡 点击图片可放大查看完整流程细节，或启动项目查看可交互的 SVG 版本。
 
