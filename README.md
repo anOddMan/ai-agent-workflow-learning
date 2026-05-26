@@ -95,18 +95,6 @@ ai-agent-technical-workflow-analysis/
 
 > 💡 点击图片可放大查看完整流程细节，或启动项目查看可交互的 SVG 版本。
 
-## 常用命令
-
-```bash
-# 开发模式（热更新）
-npm run dev
-
-# 生产构建
-npm run build
-
-# 预览生产构建
-npm run preview
-```
 
 ## 关于代理
 
