@@ -5,7 +5,7 @@
  *
  * 这个组件是整个应用的核心，包含：
  * - 顶部导航栏（桌面端和移动端适配）
- * - 6 个内容分区：总览、全景流程图、架构分层图、阶段详解、代码示例、Agent对比
+ * - 7 个内容分区：总览、全景流程图、架构分层图、阶段概览、全环节深度解析、代码示例、Agent对比
  * - 页面底部信息
  *
  * 组件架构：
@@ -22,6 +22,7 @@ import CodeExamples from './components/CodeExamples';
 import AgentComparison from './components/AgentComparison';
 import ArchitectureSVG from './components/ArchitectureSVG';
 import PhaseTimeline from './components/PhaseTimeline';
+import PhaseDeepDive from './components/PhaseDeepDive';
 
 /**
  * 导航分区类型定义
@@ -32,7 +33,7 @@ import PhaseTimeline from './components/PhaseTimeline';
  * - code: 代码示例，展示各阶段的核心代码实现
  * - comparison: Agent对比，对比主流 AI Agent 的技术架构
  */
-type Section = 'overview' | 'flow' | 'architecture' | 'timeline' | 'code' | 'comparison';
+type Section = 'overview' | 'flow' | 'architecture' | 'timeline' | 'deepdive' | 'code' | 'comparison';
 
 /**
  * 导航项配置
@@ -47,9 +48,10 @@ interface NavItem {
 // 导航项配置数组 - 用于渲染顶部导航栏按钮
 const navItems: NavItem[] = [
   { id: 'overview', label: '总览', icon: '🏠' },
-  { id: 'flow', label: '全景流程图', icon: '🗺️' },
-  { id: 'architecture', label: '架构分层图', icon: '🏗️' },
-  { id: 'timeline', label: '阶段详解', icon: '📋' },
+  { id: 'flow', label: '流程图', icon: '🗺️' },
+  { id: 'architecture', label: '架构图', icon: '🏗️' },
+  { id: 'timeline', label: '阶段概览', icon: '📋' },
+  { id: 'deepdive', label: '全环节深度解析', icon: '🔬' },
   { id: 'code', label: '代码示例', icon: '💻' },
   { id: 'comparison', label: 'Agent 对比', icon: '⚔️' },
 ];
@@ -68,8 +70,8 @@ function HeroStats() {
   // 统计数据配置数组
   const stats = [
     { label: '核心阶段', value: '8', color: 'text-blue-400' },
-    { label: '技术环节', value: '40+', color: 'text-purple-400' },
-    { label: '代码示例', value: '20+', color: 'text-green-400' },
+    { label: '技术活动', value: '60+', color: 'text-purple-400' },
+    { label: '代码示例', value: '30+', color: 'text-green-400' },
     { label: 'Agent 对比', value: '4', color: 'text-orange-400' },
   ];
 
@@ -287,13 +289,15 @@ export default function App() {
       case 'timeline':
         return (
           <div>
-            <h2 className="text-3xl font-bold gradient-text mb-2">8 大阶段详解</h2>
+            <h2 className="text-3xl font-bold gradient-text mb-2">8 大阶段概览</h2>
             <p className="text-slate-400 mb-8">
               每个阶段的详细说明、耗时估算和技术栈。
             </p>
             <PhaseTimeline />
           </div>
         );
+      case 'deepdive':
+        return <PhaseDeepDive />;
       case 'code':
         return (
           <div>
