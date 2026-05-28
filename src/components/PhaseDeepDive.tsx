@@ -62,9 +62,6 @@ function ActivityCard({ activity, accentHex }: { activity: Activity; accentHex: 
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
           </div>
-
-          {/* 概念预览 - 截取前 120 字符，最多显示 2 行 */}
-          <p className="text-slate-400 text-sm mt-1 line-clamp-2">{activity.concept.slice(0, 120)}...</p>
         </div>
       </button>
 
