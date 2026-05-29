@@ -61,17 +61,17 @@ const navItems: NavItem[] = [
  * 渲染页面顶部统计数据卡片
  *
  * 展示核心统计信息：
- * - 8 个核心阶段
- * - 40+ 个技术环节
- * - 20+ 个代码示例
+ * - 5 个核心阶段
+ * - 2 个横切层
+ * - 80+ 个技术活动
  * - 4 个主流 Agent 对比
  */
 function HeroStats() {
   // 统计数据配置数组
   const stats = [
-    { label: '核心阶段', value: '8', color: 'text-blue-400' },
-    { label: '技术活动', value: '60+', color: 'text-purple-400' },
-    { label: '代码示例', value: '30+', color: 'text-green-400' },
+    { label: '核心阶段', value: '5', color: 'text-blue-400' },
+    { label: '横切层', value: '2', color: 'text-red-400' },
+    { label: '技术活动', value: '80+', color: 'text-purple-400' },
     { label: 'Agent 对比', value: '4', color: 'text-orange-400' },
   ];
 
@@ -151,36 +151,36 @@ function OverviewSection() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             {
-              icon: '📥',
-              title: '输入处理',
-              phases: '1-2',
-              desc: '用户输入 → 客户端预处理 → API网关 → 安全检测 → 权限验证',
+              icon: '🌐',
+              title: '接入与网关',
+              phases: '1',
+              desc: '客户端预处理 → API网关鉴权 → 路由分流 → 安全检测',
               color: 'border-blue-500/30',
-              time: '~60ms',
+              time: '~50ms',
             },
             {
               icon: '🧠',
-              title: '上下文构建',
-              phases: '3',
-              desc: 'System Prompt → RAG检索 → 上下文窗口管理 → 记忆系统注入',
+              title: '上下文工程',
+              phases: '2',
+              desc: 'System Prompt → RAG检索 → 记忆注入 → 上下文窗口管理 → 缓存命中',
               color: 'border-purple-500/30',
-              time: '~200ms',
+              time: '~500ms',
             },
             {
-              icon: '⚡',
-              title: '推理 & 执行',
+              icon: '🔄',
+              title: 'Agent 循环',
+              phases: '3',
+              desc: 'LLM推理 → Tool Call → 沙盒执行 → 结果回注 → 循环直到完成',
+              color: 'border-teal-500/30',
+              time: '2-300s',
+            },
+            {
+              icon: '✨',
+              title: '输出与交付',
               phases: '4-5',
-              desc: 'Tokenize → Transformer推理 → 采样 → Tool Call → 沙盒执行 → 循环',
-              color: 'border-green-500/30',
-              time: '~5-300s',
-            },
-            {
-              icon: '📤',
-              title: '输出交付',
-              phases: '6-8',
               desc: '安全过滤 → 格式化 → SSE流式传输 → 客户端渲染 → 用户反馈',
-              color: 'border-orange-500/30',
-              time: '~150ms',
+              color: 'border-pink-500/30',
+              time: '实时流式',
             },
           ].map((item) => (
             // 每个阶段卡片
@@ -271,7 +271,7 @@ export default function App() {
           <div>
             <h2 className="text-3xl font-bold gradient-text mb-2">全景流程图</h2>
             <p className="text-slate-400 mb-6">
-              从用户输入到最终响应的完整 8 阶段业务流程，展示每个环节的核心组件和技术细节。
+              从用户输入到最终响应的完整业务流程，展示 5 个核心阶段、2 个横切层及离线优化闭环的技术细节。
             </p>
             <FlowDiagramSVG />
           </div>
@@ -289,9 +289,9 @@ export default function App() {
       case 'timeline':
         return (
           <div>
-            <h2 className="text-3xl font-bold gradient-text mb-2">8 大阶段概览</h2>
-            <p className="text-slate-400 mb-8">
-              每个阶段的详细说明、耗时估算和技术栈。
+            <h2 className="text-3xl font-bold gradient-text mb-2">阶段概览</h2>
+            <p className="text-slate-400 mb-6">
+              5 个核心阶段的详细说明、耗时估算和技术栈，外加 2 个贯穿全程的横切层。
             </p>
             <PhaseTimeline />
           </div>
@@ -302,7 +302,7 @@ export default function App() {
         return (
           <div>
             <h2 className="text-3xl font-bold gradient-text mb-2">核心代码示例</h2>
-            <p className="text-slate-400 mb-8">
+            <p className="text-slate-400 mb-6">
               每个阶段的关键技术实现代码，涵盖前后端、推理引擎、工具调用等。
             </p>
             <CodeExamples />
@@ -312,7 +312,7 @@ export default function App() {
         return (
           <div>
             <h2 className="text-3xl font-bold gradient-text mb-2">主流 Agent 对比</h2>
-            <p className="text-slate-400 mb-8">
+            <p className="text-slate-400 mb-6">
               Claude Code、OpenAI Codex、Harness AI、Hermes/Devin 的技术架构对比。
             </p>
             <AgentComparison />

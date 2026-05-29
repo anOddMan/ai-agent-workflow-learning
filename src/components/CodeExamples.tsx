@@ -1,9 +1,9 @@
 /**
  * @file CodeExamples.tsx
- * @description 代码示例组件 - 展示各阶段的核心技术实现代码
+ * @description 代码示例组件 - 展示 5 个核心阶段的技术实现代码
  * @author AI Agent Technical Workflow Analysis
  *
- * 这个组件展示 AI Agent 各阶段的核心代码示例，
+ * 这个组件展示 AI Agent 5 个核心阶段的代码示例，
  * 涵盖前后端、推理引擎、工具调用等技术实现。
  *
  * 每个代码示例包含：
@@ -13,16 +13,15 @@
  * - 代码高亮样式
  *
  * 示例涵盖的阶段：
- * - Phase 1: API 请求构建、WebSocket 连接
- * - Phase 2: Prompt Injection 检测、PII 脱敏、权限沙盒
- * - Phase 3: RAG 检索管线、代码库索引、上下文窗口管理
- * - Phase 4: vLLM 推理服务、KV Cache & Flash Attention、GPU 集群调度
- * - Phase 5: Agent Loop 核心、Tool 定义与路由、MCP 协议连接
- * - Phase 6: SSE 流式传输、响应缓存、计量计费
- * - Phase 7: OpenTelemetry 集成、LLM Eval 评测
+ * - Phase 1: 接入与网关 - API 请求构建、WebSocket 连接
+ * - Phase 2: 上下文工程 - RAG 检索管线、代码库索引、上下文窗口管理
+ * - Phase 3: Agent循环 - vLLM推理、KV Cache、Agent Loop、Tool定义、MCP协议
+ * - Phase 4: 输出后处理 - SSE 流式传输、响应缓存、计量计费
+ * - Phase 5: 响应交付 - OpenTelemetry 集成、LLM Eval 评测
  */
 
 import { useState } from 'react';
+import CodeBlockHeader from './CodeBlockHeader';
 
 /**
  * 代码标签页数据结构
@@ -92,14 +91,7 @@ function CodeExample({ title, description, icon, color, borderColor, tabs }: Cod
         {/* ===== 代码块 ===== */}
         <div className="code-block m-4 p-4 overflow-x-auto">
           {/* 代码块头部装饰 */}
-          {/* 模仿 macOS 窗口的红黄绿圆点 */}
-          <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-700/50">
-            <div className="w-3 h-3 rounded-full bg-red-500/70" />
-            <div className="w-3 h-3 rounded-full bg-yellow-500/70" />
-            <div className="w-3 h-3 rounded-full bg-green-500/70" />
-            {/* 语言标签 */}
-            <span className="text-slate-500 text-xs ml-2">{tabs[activeTab].language}</span>
-          </div>
+          <CodeBlockHeader language={tabs[activeTab].language} />
 
           {/* 代码内容 */}
           <pre className="text-[13px] leading-relaxed">
@@ -116,7 +108,7 @@ function CodeExample({ title, description, icon, color, borderColor, tabs }: Cod
 const codeExamples: CodeExampleProps[] = [
   // ===== Phase 1: API 请求构建 =====
   {
-    title: 'Phase 1: API 请求构建',
+    title: 'Phase 1: 接入与网关',
     description: '用户输入经过客户端处理后，构建符合 LLM API 规范的请求体。包括消息格式化、工具定义注入、认证信息附加等。',
     icon: '📡',
     color: 'text-blue-400',
@@ -254,7 +246,7 @@ class AgentWebSocket {
   },
   // ===== Phase 2: 安全层实现 =====
   {
-    title: 'Phase 2: 安全层实现',
+    title: '横切层: 安全与合规',
     description: 'Prompt Injection 检测、PII 过滤、权限验证等安全机制的核心实现。这是保护系统免受恶意攻击的关键屏障。',
     icon: '🛡️',
     color: 'text-red-400',
@@ -483,7 +475,7 @@ class PermissionGuard {
   },
   // ===== Phase 3: 上下文工程 =====
   {
-    title: 'Phase 3: 上下文工程',
+    title: 'Phase 2: 上下文工程',
     description: 'RAG 检索增强、向量化、上下文窗口管理是 Agent 效果的关键。包括代码库索引、语义搜索、智能截断等技术。',
     icon: '🧠',
     color: 'text-purple-400',
@@ -719,7 +711,7 @@ class ContextWindowManager {
   },
   // ===== Phase 4: 模型推理核心 =====
   {
-    title: 'Phase 4: 模型推理核心',
+    title: 'Phase 3: Agent循环 (推理+工具)',
     description: 'Transformer 推理引擎的核心实现，包括 KV Cache 管理、Flash Attention、推测解码等性能优化技术。',
     icon: '⚡',
     color: 'text-green-400',
@@ -979,7 +971,7 @@ k8s_hpa_config = {
   },
   // ===== Phase 5: Agent Loop & Tool Use =====
   {
-    title: 'Phase 5: Agent Loop & Tool Use',
+    title: 'Phase 3: Agent循环 (Tool定义)',
     description: 'Agentic 循环是现代 AI Agent 的核心范式。Agent 通过 ReAct (思考-行动-观察) 模式，迭代调用工具完成复杂任务。',
     icon: '🔄',
     color: 'text-orange-400',
@@ -1305,7 +1297,7 @@ const mcpConfigs = [
   },
   // ===== Phase 6: 输出后处理 =====
   {
-    title: 'Phase 6: 输出后处理',
+    title: 'Phase 4: 输出后处理',
     description: '模型输出经过安全过滤、格式化渲染、缓存存储后，通过 SSE 流式传输给前端客户端。',
     icon: '✨',
     color: 'text-cyan-400',
@@ -1600,7 +1592,7 @@ class BillingService {
   },
   // ===== Phase 7: 可观测性 =====
   {
-    title: 'Phase 7: 可观测性',
+    title: 'Phase 5: 响应交付 & 可观测性',
     description: '分布式追踪、指标监控、日志聚合构成完整的可观测性体系，用于性能优化和故障排查。',
     icon: '📊',
     color: 'text-yellow-400',

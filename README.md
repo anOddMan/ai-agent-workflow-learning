@@ -60,7 +60,7 @@ ai-agent-technical-workflow-analysis/
 │   ├── components/
 │   │   ├── FlowDiagramSVG.tsx    # 全景流程图（SVG）
 │   │   ├── ArchitectureSVG.tsx   # 系统架构分层图（SVG）
-│   │   ├── PhaseTimeline.tsx     # 8 阶段详解时间线
+│   │   ├── PhaseTimeline.tsx     # 5 阶段详解时间线
 │   │   ├── CodeExamples.tsx      # 各阶段代码示例
 │   │   └── AgentComparison.tsx   # 主流 Agent 对比
 │   └── utils/
@@ -78,22 +78,21 @@ ai-agent-technical-workflow-analysis/
 
 ## 内容概览
 
-项目包含 6 个主要内容分区：
+项目包含 7 个主要内容分区：
 
 1. **总览** - 项目介绍和快速概览卡片
-2. **全景流程图** - 8 阶段完整业务流程 SVG 图
+2. **全景流程图** - 5 阶段 + 2 横切层 + 离线闭环的完整业务流程 SVG 图
 3. **架构分层图** - 三层系统架构（前端/服务/基础设施）
-4. **阶段详解** - 每个阶段的详细说明和技术栈
-5. **代码示例** - 各阶段核心代码实现
-6. **Agent 对比** - Claude Code / Codex / Harness / Devin 技术对比
+4. **阶段概览** - 每个阶段的详细说明和技术栈
+5. **全环节深度解析** - 技术活动详情（可展开）
+6. **代码示例** - 各阶段核心代码实现
+7. **Agent 对比** - Claude Code / Codex / Harness / Hermes/Devin 技术对比
 
 ## 🖼️ 全景流程图预览
 
-以下是「全景流程图」模块的页面截图，展示了 AI Agent 从用户输入到最终响应的 8 个完整业务阶段：
+以下是「全景流程图」模块的 SVG 渲染效果，展示了 AI Agent 从用户输入到最终响应的完整业务流程：
 
-![全景流程图](src/AI%20Agent%20底层业务流程全景图.jpg)
-
-> 💡 点击图片可放大查看完整流程细节，或启动项目查看可交互的 SVG 版本。
+> 💡 启动项目即可查看可交互的 SVG 流程图，支持缩放和详细标注。
 
 
 ## 关于代理

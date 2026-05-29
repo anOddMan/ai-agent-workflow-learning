@@ -1,6 +1,6 @@
 /**
  * @file PhaseDeepDive.tsx
- * @description 全环节深度解析组件 - 展示 8 个阶段的技术活动详情
+ * @description 全环节深度解析组件 - 展示 5 个阶段 + 横切层 + 离线闭环的技术活动详情
  * @author AI Agent Technical Workflow Analysis
  */
 
@@ -8,12 +8,16 @@
 
 // 导入 React 的 useState 钩子，用于管理组件状态
 import { useState } from 'react';
+import CodeBlockHeader from './CodeBlockHeader';
 
 // 导入类型定义，用于类型安全
-import type { PhaseData, PhaseModule, Activity } from '../data/phaseDeepDive';
+import type { PhaseData, PhaseModule, Activity, SwimLaneData, SwimLaneActivity, OfflineLoopData, OfflineLoopActivity } from '../data/phaseDeepDive';
 
-// 导入阶段数据数组
-import { phases } from '../data/phaseDeepDive';
+// 导入统一数据
+import unifiedData from '../data/phasesData';
+
+// 解构数据
+const { phases, swimLanes, offlineLoop } = unifiedData;
 
 // ==================== ActivityCard 活动卡片组件 ====================
 
@@ -155,26 +159,12 @@ function ActivityCard({ activity, accentHex }: { activity: Activity; accentHex: 
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
                 {/* 区块标题 */}
                 <h5 className="text-sm font-bold text-slate-300">💻 代码逻辑</h5>
-                {/* 代码语言标识 - 条件渲染 */}
-                {activity.codeLanguage && (
-                  <span className="text-xs text-slate-500 font-mono">({activity.codeLanguage})</span>
-                )}
               </div>
 
               {/* 代码块容器 */}
               <div className="code-block p-4 overflow-x-auto ml-4">
-                {/* ==================== 代码块头部装饰 ==================== */}
-                {/* macOS 风格的窗口按钮（红黄绿） */}
-                <div className="flex items-center gap-2 mb-3 pb-2 border-b border-slate-700/50">
-                  {/* 红色按钮 */}
-                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/60" />
-                  {/* 黄色按钮 */}
-                  <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/60" />
-                  {/* 绿色按钮 */}
-                  <div className="w-2.5 h-2.5 rounded-full bg-green-500/60" />
-                  {/* 语言标识 */}
-                  <span className="text-slate-500 text-xs ml-1">{activity.codeLanguage || 'Code'}</span>
-                </div>
+                {/* 代码块头部装饰 */}
+                <CodeBlockHeader language={activity.codeLanguage} />
 
                 {/* 代码内容 - 使用 pre 保持格式 */}
                 <pre className="text-[12.5px] leading-[1.6] whitespace-pre-wrap">
@@ -319,6 +309,16 @@ export default function PhaseDeepDive() {
     ), 0
   );
 
+  // 计算横切层总活动数
+  const swimLaneActivities = swimLanes.reduce(
+    (sum, sl) => sum + sl.sections.reduce((s, sec) => s + sec.activities.length, 0), 0
+  );
+
+  // 计算离线闭环总活动数
+  const offlineActivities = offlineLoop.modules.reduce(
+    (sum, m) => sum + m.activities.length, 0
+  );
+
   // 返回主组件的 JSX 结构
   return (
     <div>
@@ -328,11 +328,17 @@ export default function PhaseDeepDive() {
         {/* 左侧：标题和统计 */}
         <div>
           {/* 页面主标题 - 渐变色效果 */}
-          <h2 className="text-3xl font-bold gradient-text">全环节深度解析</h2>
+          <h2 className="text-3xl font-bold gradient-text mb-2">全环节深度解析</h2>
           {/* 统计信息 */}
           <p className="text-slate-400 mt-1">
             {/* 阶段数 · 模块数 · 活动数 */}
-            8 个阶段 · {phases.reduce((s, p) => s + p.modules.length, 0)} 个模块 · {totalActivities} 个活动
+            5 个阶段 · {phases.reduce((s, p) => s + p.modules.length, 0)} 个模块 · {totalActivities} 个活动
+            <span className="text-slate-500 mx-2">+</span>
+            {/* 横切层统计 */}
+            2 个横切层 · {swimLaneActivities} 个横切活动
+            <span className="text-slate-500 mx-2">+</span>
+            {/* 离线闭环统计 */}
+            离线闭环 · {offlineActivities} 个优化活动
             {/* 提示文字 */}
             <span className="text-slate-500 ml-2">— 点击展开查看详情</span>
           </p>
@@ -364,6 +370,27 @@ export default function PhaseDeepDive() {
             <PhaseSection key={phase.phaseNumber} phase={phase} />
           )
         ))}
+      </div>
+
+      {/* ==================== 横切层列表 ==================== */}
+      <div className="mt-8 space-y-4">
+        <h3 className="text-2xl font-bold text-slate-200 mb-4">横切层（贯穿全程）</h3>
+        {swimLanes.map((swimLane) => (
+          expandAll ? (
+            <SwimLaneOpenSection key={swimLane.id} swimLane={swimLane} />
+          ) : (
+            <SwimLaneSection key={swimLane.id} swimLane={swimLane} />
+          )
+        ))}
+      </div>
+
+      {/* ==================== 离线优化闭环 ==================== */}
+      <div className="mt-8">
+        {expandAll ? (
+          <OfflineLoopOpenSection offlineLoop={offlineLoop} />
+        ) : (
+          <OfflineLoopSection offlineLoop={offlineLoop} />
+        )}
       </div>
     </div>
   );
@@ -415,6 +442,250 @@ function PhaseOpenSection({ phase }: { phase: PhaseData }) {
         {phase.modules.map((module) => (
           <ModuleSection key={module.id} module={module} accentHex={phase.accentHex} />
         ))}
+      </div>
+    </div>
+  );
+}
+
+// ==================== SwimLaneActivityCard 横切层活动卡片组件 ====================
+
+function SwimLaneActivityCard({ activity, accentHex }: { activity: SwimLaneActivity; accentHex: string }) {
+  return (
+    <div className="border border-slate-700/40 rounded-xl p-4 bg-slate-900/40">
+      <div className="flex items-center gap-3 mb-2">
+        <span className="text-xl">{activity.icon}</span>
+        <h4 className="text-sm font-bold text-slate-200">{activity.name}</h4>
+      </div>
+      <p className="text-slate-400 text-xs mb-3">{activity.description}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {activity.tools.map((tool) => (
+          <span
+            key={tool}
+            className="px-2 py-0.5 rounded text-xs font-mono border"
+            style={{
+              borderColor: accentHex + '30',
+              color: accentHex,
+              backgroundColor: accentHex + '10',
+            }}
+          >
+            {tool}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ==================== SwimLaneSection 横切层区块组件 ====================
+
+function SwimLaneSection({ swimLane }: { swimLane: SwimLaneData }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const totalActivities = swimLane.sections.reduce((sum, sec) => sum + sec.activities.length, 0);
+
+  return (
+    <div className={`border rounded-2xl overflow-hidden ${swimLane.position === 'left' ? 'border-blue-500/30' : 'border-purple-500/30'}`}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full text-left p-5 flex items-center gap-4 group hover:bg-slate-800/30 transition-colors"
+      >
+        <div className={`w-12 h-12 rounded-xl ${swimLane.position === 'left' ? 'bg-blue-500' : 'bg-purple-500'} flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg`}>
+          {swimLane.icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className={`text-lg font-bold ${swimLane.color}`}>{swimLane.name}</h2>
+            <span className="text-slate-500 text-xs">({swimLane.position === 'left' ? '左侧' : '右侧'})</span>
+          </div>
+          <p className="text-slate-400 text-sm">{swimLane.sections.length} 个分区 · {totalActivities} 个活动</p>
+        </div>
+        <svg className={`w-5 h-5 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="p-5 pt-2 border-t border-slate-700/30">
+          <p className="text-slate-500 text-sm mb-4">{swimLane.description}</p>
+          <div className="space-y-4">
+            {swimLane.sections.map((section, idx) => (
+              <div key={idx}>
+                <h4 className="text-sm font-bold text-slate-300 mb-2 flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: swimLane.accentHex }} />
+                  {section.sectionName}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {section.activities.map((activity) => (
+                    <SwimLaneActivityCard key={activity.id} activity={activity} accentHex={swimLane.accentHex} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ==================== OfflineLoopActivityCard 离线闭环活动卡片组件 ====================
+
+function OfflineLoopActivityCard({ activity, accentHex }: { activity: OfflineLoopActivity; accentHex: string }) {
+  return (
+    <div className="border border-slate-700/40 rounded-xl p-4 bg-slate-900/40">
+      <div className="flex items-center gap-2 mb-1">
+        <span className="text-lg">{activity.icon}</span>
+        <h4 className="text-sm font-bold text-slate-200">{activity.name}</h4>
+      </div>
+      <p className="text-slate-400 text-xs mb-2">{activity.description}</p>
+      <div className="flex flex-wrap gap-1">
+        {activity.tools.map((tool) => (
+          <span
+            key={tool}
+            className="px-1.5 py-0.5 rounded text-xs font-mono border"
+            style={{
+              borderColor: accentHex + '30',
+              color: accentHex,
+              backgroundColor: accentHex + '10',
+            }}
+          >
+            {tool}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ==================== OfflineLoopSection 离线闭环区块组件 ====================
+
+function OfflineLoopSection({ offlineLoop }: { offlineLoop: OfflineLoopData }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const totalActivities = offlineLoop.modules.reduce((sum, m) => sum + m.activities.length, 0);
+
+  return (
+    <div className="border border-slate-600/30 rounded-2xl overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full text-left p-5 flex items-center gap-4 group hover:bg-slate-800/30 transition-colors"
+      >
+        <div className="w-12 h-12 rounded-xl bg-slate-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg">
+          🔁
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className={`text-lg font-bold ${offlineLoop.color}`}>{offlineLoop.title}</h2>
+            <span className="text-slate-500 text-xs font-mono">{offlineLoop.subtitle}</span>
+          </div>
+          <p className="text-slate-400 text-sm">{offlineLoop.modules.length} 个模块 · {totalActivities} 个活动</p>
+        </div>
+        <svg className={`w-5 h-5 text-slate-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+
+      {isOpen && (
+        <div className="p-5 pt-2 border-t border-slate-700/30">
+          <p className="text-slate-500 text-sm mb-4">{offlineLoop.description}</p>
+          <div className="space-y-4">
+            {offlineLoop.modules.map((module, idx) => (
+              <div key={idx}>
+                <h4 className="text-sm font-bold text-slate-300 mb-2 flex items-center gap-2">
+                  <span className="text-lg">{module.moduleIcon}</span>
+                  {module.moduleName}
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                  {module.activities.map((activity, actIdx) => (
+                    <OfflineLoopActivityCard key={actIdx} activity={activity} accentHex={offlineLoop.accentHex} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ==================== SwimLaneOpenSection 预展开横切层组件 ====================
+
+function SwimLaneOpenSection({ swimLane }: { swimLane: SwimLaneData }) {
+  const totalActivities = swimLane.sections.reduce((sum, sec) => sum + sec.activities.length, 0);
+
+  return (
+    <div className={`border rounded-2xl overflow-hidden ${swimLane.position === 'left' ? 'border-blue-500/30' : 'border-purple-500/30'}`}>
+      <div className="p-5 flex items-center gap-4">
+        <div className={`w-12 h-12 rounded-xl ${swimLane.position === 'left' ? 'bg-blue-500' : 'bg-purple-500'} flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg`}>
+          {swimLane.icon}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className={`text-lg font-bold ${swimLane.color}`}>{swimLane.name}</h2>
+            <span className="text-slate-500 text-xs">({swimLane.position === 'left' ? '左侧' : '右侧'})</span>
+          </div>
+          <p className="text-slate-400 text-sm">{swimLane.sections.length} 个分区 · {totalActivities} 个活动</p>
+        </div>
+      </div>
+
+      <div className="p-5 pt-2 border-t border-slate-700/30">
+        <p className="text-slate-500 text-sm mb-4">{swimLane.description}</p>
+        <div className="space-y-4">
+          {swimLane.sections.map((section, idx) => (
+            <div key={idx}>
+              <h4 className="text-sm font-bold text-slate-300 mb-2 flex items-center gap-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: swimLane.accentHex }} />
+                {section.sectionName}
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                {section.activities.map((activity) => (
+                  <SwimLaneActivityCard key={activity.id} activity={activity} accentHex={swimLane.accentHex} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ==================== OfflineLoopOpenSection 预展开离线闭环组件 ====================
+
+function OfflineLoopOpenSection({ offlineLoop }: { offlineLoop: OfflineLoopData }) {
+  const totalActivities = offlineLoop.modules.reduce((sum, m) => sum + m.activities.length, 0);
+
+  return (
+    <div className="border border-slate-600/30 rounded-2xl overflow-hidden">
+      <div className="p-5 flex items-center gap-4">
+        <div className="w-12 h-12 rounded-xl bg-slate-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg">
+          🔁
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-3">
+            <h2 className={`text-lg font-bold ${offlineLoop.color}`}>{offlineLoop.title}</h2>
+            <span className="text-slate-500 text-xs font-mono">{offlineLoop.subtitle}</span>
+          </div>
+          <p className="text-slate-400 text-sm">{offlineLoop.modules.length} 个模块 · {totalActivities} 个活动</p>
+        </div>
+      </div>
+
+      <div className="p-5 pt-2 border-t border-slate-700/30">
+        <p className="text-slate-500 text-sm mb-4">{offlineLoop.description}</p>
+        <div className="space-y-4">
+          {offlineLoop.modules.map((module, idx) => (
+            <div key={idx}>
+              <h4 className="text-sm font-bold text-slate-300 mb-2 flex items-center gap-2">
+                <span className="text-lg">{module.moduleIcon}</span>
+                {module.moduleName}
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                {module.activities.map((activity, actIdx) => (
+                  <OfflineLoopActivityCard key={actIdx} activity={activity} accentHex={offlineLoop.accentHex} />
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
