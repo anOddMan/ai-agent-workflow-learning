@@ -107,8 +107,23 @@ export interface SwimLaneActivity {
   // 活动的描述
   description: string;
 
+  // 概念介绍：解释这个活动是什么、为什么需要它
+  concept: string;
+
+  // 原理解释：说明这个活动的技术实现原理
+  principle: string;
+
   // 使用的技术工具列表
   tools: string[];
+
+  // 实际场景案例：描述一个具体的使用场景
+  scenario: string;
+
+  // 可选的代码示例，展示关键实现逻辑
+  code?: string;
+
+  // 可选的代码语言标识
+  codeLanguage?: string;
 }
 
 // ==================== SwimLaneSection 横切层分区接口 ====================
@@ -164,8 +179,23 @@ export interface OfflineLoopActivity {
   // 活动的描述
   description: string;
 
+  // 概念介绍：解释这个活动是什么、为什么需要它
+  concept: string;
+
+  // 原理解释：说明这个活动的技术实现原理
+  principle: string;
+
   // 使用的技术工具列表
   tools: string[];
+
+  // 实际场景案例：描述一个具体的使用场景
+  scenario: string;
+
+  // 可选的代码示例，展示关键实现逻辑
+  code?: string;
+
+  // 可选的代码语言标识
+  codeLanguage?: string;
 }
 
 // ==================== OfflineLoopModule 离线闭环模块接口 ====================

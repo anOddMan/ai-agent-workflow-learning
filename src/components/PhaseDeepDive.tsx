@@ -450,28 +450,73 @@ function PhaseOpenSection({ phase }: { phase: PhaseData }) {
 // ==================== SwimLaneActivityCard 横切层活动卡片组件 ====================
 
 function SwimLaneActivityCard({ activity, accentHex }: { activity: SwimLaneActivity; accentHex: string }) {
+  const [expanded, setExpanded] = useState(false);
   return (
-    <div className="border border-slate-700/40 rounded-xl p-4 bg-slate-900/40">
-      <div className="flex items-center gap-3 mb-2">
-        <span className="text-xl">{activity.icon}</span>
-        <h4 className="text-sm font-bold text-slate-200">{activity.name}</h4>
-      </div>
-      <p className="text-slate-400 text-xs mb-3">{activity.description}</p>
-      <div className="flex flex-wrap gap-1.5">
-        {activity.tools.map((tool) => (
-          <span
-            key={tool}
-            className="px-2 py-0.5 rounded text-xs font-mono border"
-            style={{
-              borderColor: accentHex + '30',
-              color: accentHex,
-              backgroundColor: accentHex + '10',
-            }}
-          >
-            {tool}
-          </span>
-        ))}
-      </div>
+    <div className="border border-slate-700/40 rounded-xl overflow-hidden bg-slate-900/40 hover:bg-slate-900/60 transition-all">
+      <button onClick={() => setExpanded(!expanded)} className="w-full text-left p-4 flex items-start gap-3 group">
+        <span className="text-xl flex-shrink-0 mt-0.5">{activity.icon}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">{activity.name}</h4>
+            <svg className={`w-4 h-4 text-slate-500 transition-transform flex-shrink-0 ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <p className="text-slate-400 text-xs mt-1">{activity.description}</p>
+        </div>
+      </button>
+      {expanded && (
+        <div className="px-4 pb-4 space-y-4 border-t border-slate-700/30 pt-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">📖 概念介绍</h5>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed pl-4">{activity.concept}</p>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">⚙️ 原理解释</h5>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed pl-4">{activity.principle}</p>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">🛠️ 使用工具</h5>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pl-4">
+              {activity.tools.map((tool) => (
+                <span key={tool} className="px-2 py-0.5 rounded text-xs font-mono border" style={{ borderColor: accentHex + '30', color: accentHex, backgroundColor: accentHex + '10' }}>{tool}</span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">💡 实际场景案例</h5>
+            </div>
+            <div className="pl-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700/30">
+              <p className="text-slate-300 text-xs leading-relaxed">{activity.scenario}</p>
+            </div>
+          </div>
+          {activity.code && (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+                <h5 className="text-sm font-bold text-slate-300">💻 代码逻辑</h5>
+              </div>
+              <div className="code-block p-3 overflow-x-auto ml-4">
+                <CodeBlockHeader language={activity.codeLanguage} />
+                <pre className="text-[12.5px] leading-[1.6] whitespace-pre-wrap">
+                  <code className="text-slate-300">{activity.code}</code>
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -513,7 +558,7 @@ function SwimLaneSection({ swimLane }: { swimLane: SwimLaneData }) {
                   <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: swimLane.accentHex }} />
                   {section.sectionName}
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {section.activities.map((activity) => (
                     <SwimLaneActivityCard key={activity.id} activity={activity} accentHex={swimLane.accentHex} />
                   ))}
@@ -530,28 +575,73 @@ function SwimLaneSection({ swimLane }: { swimLane: SwimLaneData }) {
 // ==================== OfflineLoopActivityCard 离线闭环活动卡片组件 ====================
 
 function OfflineLoopActivityCard({ activity, accentHex }: { activity: OfflineLoopActivity; accentHex: string }) {
+  const [expanded, setExpanded] = useState(false);
   return (
-    <div className="border border-slate-700/40 rounded-xl p-4 bg-slate-900/40">
-      <div className="flex items-center gap-2 mb-1">
-        <span className="text-lg">{activity.icon}</span>
-        <h4 className="text-sm font-bold text-slate-200">{activity.name}</h4>
-      </div>
-      <p className="text-slate-400 text-xs mb-2">{activity.description}</p>
-      <div className="flex flex-wrap gap-1">
-        {activity.tools.map((tool) => (
-          <span
-            key={tool}
-            className="px-1.5 py-0.5 rounded text-xs font-mono border"
-            style={{
-              borderColor: accentHex + '30',
-              color: accentHex,
-              backgroundColor: accentHex + '10',
-            }}
-          >
-            {tool}
-          </span>
-        ))}
-      </div>
+    <div className="border border-slate-700/40 rounded-xl overflow-hidden bg-slate-900/40 hover:bg-slate-900/60 transition-all">
+      <button onClick={() => setExpanded(!expanded)} className="w-full text-left p-4 flex items-start gap-3 group">
+        <span className="text-lg flex-shrink-0 mt-0.5">{activity.icon}</span>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h4 className="text-sm font-bold text-slate-200 group-hover:text-white transition-colors">{activity.name}</h4>
+            <svg className={`w-4 h-4 text-slate-500 transition-transform flex-shrink-0 ${expanded ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <p className="text-slate-400 text-xs mt-1">{activity.description}</p>
+        </div>
+      </button>
+      {expanded && (
+        <div className="px-4 pb-4 space-y-4 border-t border-slate-700/30 pt-4">
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">📖 概念介绍</h5>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed pl-4">{activity.concept}</p>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">⚙️ 原理解释</h5>
+            </div>
+            <p className="text-slate-400 text-xs leading-relaxed pl-4">{activity.principle}</p>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">🛠️ 使用工具</h5>
+            </div>
+            <div className="flex flex-wrap gap-1.5 pl-4">
+              {activity.tools.map((tool) => (
+                <span key={tool} className="px-2 py-0.5 rounded text-xs font-mono border" style={{ borderColor: accentHex + '30', color: accentHex, backgroundColor: accentHex + '10' }}>{tool}</span>
+              ))}
+            </div>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+              <h5 className="text-sm font-bold text-slate-300">💡 实际场景案例</h5>
+            </div>
+            <div className="pl-4 p-3 rounded-lg bg-slate-800/50 border border-slate-700/30">
+              <p className="text-slate-300 text-xs leading-relaxed">{activity.scenario}</p>
+            </div>
+          </div>
+          {activity.code && (
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accentHex }} />
+                <h5 className="text-sm font-bold text-slate-300">💻 代码逻辑</h5>
+              </div>
+              <div className="code-block p-3 overflow-x-auto ml-4">
+                <CodeBlockHeader language={activity.codeLanguage} />
+                <pre className="text-[12.5px] leading-[1.6] whitespace-pre-wrap">
+                  <code className="text-slate-300">{activity.code}</code>
+                </pre>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
@@ -593,7 +683,7 @@ function OfflineLoopSection({ offlineLoop }: { offlineLoop: OfflineLoopData }) {
                   <span className="text-lg">{module.moduleIcon}</span>
                   {module.moduleName}
                 </h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                   {module.activities.map((activity, actIdx) => (
                     <OfflineLoopActivityCard key={actIdx} activity={activity} accentHex={offlineLoop.accentHex} />
                   ))}
@@ -636,7 +726,7 @@ function SwimLaneOpenSection({ swimLane }: { swimLane: SwimLaneData }) {
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: swimLane.accentHex }} />
                 {section.sectionName}
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {section.activities.map((activity) => (
                   <SwimLaneActivityCard key={activity.id} activity={activity} accentHex={swimLane.accentHex} />
                 ))}
@@ -678,7 +768,7 @@ function OfflineLoopOpenSection({ offlineLoop }: { offlineLoop: OfflineLoopData 
                 <span className="text-lg">{module.moduleIcon}</span>
                 {module.moduleName}
               </h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
                 {module.activities.map((activity, actIdx) => (
                   <OfflineLoopActivityCard key={actIdx} activity={activity} accentHex={offlineLoop.accentHex} />
                 ))}
